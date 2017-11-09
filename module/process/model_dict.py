@@ -33,18 +33,3 @@ class DictModel:
     def get(self, key):
         return None if self.data_set.get(key) is None else self.data_set[key]
 
-#
-#
-# class Profile(DictModel):
-#     def __init__(self):
-#         pass
-#
-#
-# class BankCard(DictModel):
-#     def __init__(self):
-#         pass
-#
-#
-# class Basic(DictModel):
-#     def __init__(self):
-#         pass
