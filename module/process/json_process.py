@@ -1,8 +1,4 @@
 import json
-import settings
-from com.aliyun.api.gateway.sdk import client
-from com.aliyun.api.gateway.sdk.http import request
-from com.aliyun.api.gateway.sdk.common import constant
 from model_dict import DictModel
 
 
@@ -14,7 +10,6 @@ class RequestInitializer:
         :param kwargs: `config`: dict
         """
         self.config = kwargs["config"]
-        self.cli = client.DefaultClient(app_key=self.config["app_key"], app_secret=self.config["app_secret"])
         self.req = None
 
     def new_request(self, **kwargs):
@@ -24,13 +19,6 @@ class RequestInitializer:
         :param kwargs:
         :return: `RequestInitializer`
         """
-        url = self.config["base_url"]
-
-        if kwargs.get("user_id") is not None:
-            url = url + kwargs["user_id"]
-
-        self.req = request.Request(host=self.config["host"], protocol=constant.HTTP, url=url,
-                                   method=kwargs["method"], time_out=kwargs["timeout"])
 
         return self
 
@@ -40,16 +28,7 @@ class RequestInitializer:
 
         :return: a list or dict
         """
-        raw_result = self.cli.execute(self.req)
-
-        if raw_result[0] == 200:
-            if only_user_data:
-                return json.loads(raw_result[-1])
-            else:
-                return json.loads(raw_result)
-        else:
-            print("<module: json_process>, Cannot get data: ", raw_result[0])
-            exit(1)
+        pass
 
 
 class JsonHandler:
@@ -57,23 +36,10 @@ class JsonHandler:
         """
         Initialization for json handler
 
-        :param kwargs: a dict accept `id`: str-like or list, `mode`: option(single, multiple)
         """
-        self.data_dict = dict()
-        self.data_list = dict()
-        self.user_id = kwargs["user_id"]
+        pass
 
     def request_data(self):
-        """
-        If you do not specify `user_id`, this method will return blablabla, cannot be `None`
-
-        :param user_id: `int`
-        """
-        raw_data = RequestInitializer(config=settings.config).new_request(user_id=self.user_id, method='GET',
-                                                                          timeout=3000).execute(only_user_data=True)
-
-        self._separate_raw_data(raw_data)
-
         return self
 
     def _separate_raw_data(self, raw_data):
